@@ -14,7 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      draw_history: {
+        Row: {
+          drawn_at: string
+          duration: string | null
+          genres: string[]
+          id: string
+          mood: string | null
+          movie_id: number
+          poster_path: string | null
+          title: string
+          user_id: string
+          vote_average: number | null
+        }
+        Insert: {
+          drawn_at?: string
+          duration?: string | null
+          genres?: string[]
+          id?: string
+          mood?: string | null
+          movie_id: number
+          poster_path?: string | null
+          title: string
+          user_id: string
+          vote_average?: number | null
+        }
+        Update: {
+          drawn_at?: string
+          duration?: string | null
+          genres?: string[]
+          id?: string
+          mood?: string | null
+          movie_id?: number
+          poster_path?: string | null
+          title?: string
+          user_id?: string
+          vote_average?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          duration: string
+          genres: number[]
+          id: string
+          mood: string
+          updated_at: string
+        }
+        Insert: {
+          duration?: string
+          genres?: number[]
+          id: string
+          mood?: string
+          updated_at?: string
+        }
+        Update: {
+          duration?: string
+          genres?: number[]
+          id?: string
+          mood?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
