@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Star } from "lucide-react";
 import { useApp } from "@/hooks/use-app";
 import { Button } from "@/components/ui/button";
-import { PosterImg } from "@/routes/index";
+import { PosterImg } from "@/components/PosterImg";
 import { MOOD_LABEL, type Mood } from "@/lib/sorteio";
 
 export const Route = createFileRoute("/_authenticated/history")({

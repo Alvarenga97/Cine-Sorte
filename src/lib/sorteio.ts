@@ -73,7 +73,7 @@ export function pickRandomMovie<T extends ScorableMovie>(
   );
   if (!pool.length) return null;
   const top = pool.slice(0, Math.max(1, Math.ceil(pool.length / 2)));
-  return top[Math.floor(rng() * top.length)].movie;
+  return top[Math.floor(rng() * top.length)]?.movie ?? null;
 }
 
 export function randomPage(totalPages: number, rng: Rng = Math.random) {

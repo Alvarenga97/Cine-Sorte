@@ -10,7 +10,7 @@ async function tmdb<T>(path: string, params: Record<string, string | number> = {
   url.searchParams.set("language", "pt-BR");
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, String(v));
   const headers: Record<string, string> = { accept: "application/json" };
-  if (key.length > 40) headers.Authorization = `Bearer ${key}`;
+  if (key.length > 40) headers["Authorization"] = `Bearer ${key}`;
   else url.searchParams.set("api_key", key);
   const res = await fetch(url, { headers });
   if (!res.ok) {

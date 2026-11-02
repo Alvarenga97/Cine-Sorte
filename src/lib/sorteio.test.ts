@@ -21,8 +21,8 @@ describe("sorteio", () => {
   });
   it("pontuação por humor", () => {
     const s = scoreMoviesByMood([{ id: 1, genre_ids: [18, 10749] }, { id: 2, genre_ids: [28] }], "melancolico", []);
-    expect(s[0].score).toBe(2);
-    expect(s[1].score).toBe(0);
+    expect(s[0]?.score).toBe(2);
+    expect(s[1]?.score).toBe(0);
   });
   it("sorteio determinístico e exclusão", () => {
     const movies = [

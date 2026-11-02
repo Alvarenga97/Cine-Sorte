@@ -12,6 +12,7 @@ import { discoverMovies, getMovieExtras, type DiscoverMovie } from "@/lib/tmdb.f
 import { durationToRuntimeRange, mapMoodToGenres, pickRandomMovie, MOOD_LABEL, DURATION_LABEL } from "@/lib/sorteio";
 import { posterUrl } from "@/lib/storage";
 import { genresQuery } from "@/components/ProfileForm";
+import { PosterImg } from "@/components/PosterImg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -186,11 +187,3 @@ function Index() {
   );
 }
 
-export function PosterImg({ path, title, className }: { path: string | null; title: string; className?: string }) {
-  const [bad, setBad] = useState(false);
-  const src = posterUrl(path);
-  if (!src || bad) {
-    return <div className={`flex items-center justify-center bg-muted ${className}`}><Film className="h-10 w-10 text-muted-foreground" /></div>;
-  }
-  return <img src={src} alt={`Pôster de ${title}`} onError={() => setBad(true)} className={`object-cover ${className}`} loading="lazy" />;
-}
