@@ -1,24 +1,63 @@
-# Screenshot to Spec
+# Cine-Sorte
 
-Implement exactly the screenshot and nothing else
+Aplicação web para ajudar a escolher um filme para assistir. O Cine-Sorte combina um sorteio de filmes com preferências de perfil, como humor e duração, para tornar a escolha mais simples.
 
-This project was built with [Lovable](https://lovable.dev).
+> **Status:** README elaborado a partir da estrutura e dos arquivos públicos do repositório. Alguns detalhes do catálogo e da origem dos dados não estão documentados no código/README consultado; por isso, não são apresentados como fatos.
 
-## Build with Lovable
+## Funcionalidades identificadas
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/6811d728-ccb2-4c7f-9385-81d3fd0386fd).
+- **Sorteio de filmes** para ajudar a decidir o que assistir.
+- **Preferências de perfil** organizadas por duração (`curto`, `médio` e `longo`).
+- **Perfil e histórico** mantidos no armazenamento local do navegador.
+- **Exibição de pôsteres**, com componente próprio para apresentar a imagem do filme.
+- **Interface interativa**, com notificações para feedback ao usuário.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+> Os valores de humor e duração acima correspondem às opções definidas no código. O README original do projeto era o texto padrão de um template Lovable, sem documentação funcional detalhada.
 
-## Development
+## Stack
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+- **React** — interface baseada em componentes.
+- **TypeScript** — tipagem estática.
+- **TanStack Start / TanStack Router** — estrutura da aplicação e roteamento baseado em arquivos.
+- **Vite** — servidor de desenvolvimento e build.
+- **Tailwind CSS** — estilização.
+- **TanStack Query** — gerenciamento de dados/cache no cliente.
+- **Zod** — validação e modelagem de dados.
+- **Sonner** — notificações (toasts).
+- **Lucide React** — ícones.
+- **Local Storage** — persistência local de perfil e histórico.
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+## Como executar localmente
+
+### Pré-requisitos
+
+- Node.js e npm instalados.
+
+### Instalação
+
+```bash
+git clone https://github.com/Alvarenga97/Cine-Sorte.git
+cd Cine-Sorte
+npm install
 npm run dev
+```
+
+O Vite exibirá no terminal o endereço local para abrir a aplicação.
+
+### Build de produção
+
+```bash
+npm run build
+npm run preview
+```
+
+O projeto também declara o comando `npm run build:dev` para gerar um build no modo de desenvolvimento.
+
+## Estrutura observada
+
+```text
+src/
+├── components/       # Componentes reutilizáveis, incluindo exibição de pôster
+├── lib/              # Modelos/validação e armazenamento local
+└── routes/           # Rotas da aplicação (TanStack Router)
 ```
