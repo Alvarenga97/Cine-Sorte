@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { discoverMovies, getMovieExtras, type DiscoverMovie } from "@/lib/tmdb.functions";
-import { durationToRuntimeRange, mapMoodToGenres, pickRandomMovie, MOOD_LABEL, DURATION_LABEL } from "@/lib/sorteio";
+import { durationToRuntimeRange, pickBestGenreMatch, DURATION_LABEL } from "@/lib/sorteio";
 import { posterUrl } from "@/lib/storage";
 import { genresQuery } from "@/components/ProfileForm";
 import { PosterImg } from "@/components/PosterImg";
@@ -56,23 +56,25 @@ function Index() {
     try {
       const range = durationToRuntimeRange(profile.duration);
       const exclude = [...history.map((h) => h.movieId), ...(result ? [result.movie.id] : [])];
-      let favs = [...profile.genres];
+      const favs = [...profile.genres];
+      // 1) filmes com TODOS os gêneros escolhidos; 2) senão, o mais próximo possível
       let picked: DiscoverMovie | null = null;
       let relaxed = false;
-      while (!picked) {
-        const genres = Array.from(new Set([...favs, ...mapMoodToGenres(profile.mood)]));
-        const { results } = await discoverMovies({ data: { genres, ...range } });
-        picked = pickRandomMovie(results, profile.mood, favs, exclude);
-        if (picked || favs.length <= 1) break;
-        favs = favs.slice(0, -1);
-        relaxed = true;
+      if (favs.length > 1) {
+        const { results } = await discoverMovies({ data: { genres: favs, ...range, match: "all" } });
+        picked = pickBestGenreMatch(results, favs, exclude);
+      }
+      if (!picked) {
+        const { results } = await discoverMovies({ data: { genres: favs, ...range, match: "any" } });
+        picked = pickBestGenreMatch(results, favs, exclude);
+        relaxed = favs.length > 1 && !!picked;
       }
       if (!picked) {
         setEmpty(true);
         setResult(null);
         return;
       }
-      if (relaxed) toast("Ampliamos a busca removendo um gênero para encontrar algo novo.");
+      if (relaxed) toast("Não achamos um filme com todos os gêneros; escolhemos o mais próximo.");
       const extras = await getMovieExtras({ data: { id: picked.id } });
       setResult({ movie: picked, ...extras });
       await addHistory({
@@ -163,7 +165,6 @@ function Index() {
         <section className="flex flex-wrap items-center gap-3 rounded-lg border border-border bg-card p-4">
           <span className="text-sm text-muted-foreground">Seu perfil:</span>
           {genreNames.map((n) => <Badge key={n} variant="secondary">{n}</Badge>)}
-          <Badge variant="outline">{MOOD_LABEL[profile.mood]}</Badge>
           <Badge variant="outline">{DURATION_LABEL[profile.duration]}</Badge>
           <Button asChild size="sm" variant="ghost" className="ml-auto"><Link to="/profile"><Pencil /> Editar</Link></Button>
         </section>

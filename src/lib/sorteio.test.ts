@@ -6,6 +6,7 @@ import {
   pickRandomMovie,
   randomPage,
   ProfileSchema,
+  pickBestGenreMatch,
 } from "./sorteio";
 
 describe("sorteio", () => {
@@ -42,5 +43,10 @@ describe("sorteio", () => {
     const base = { version: 1, mood: "animado", duration: "medio", updatedAt: "" };
     expect(ProfileSchema.safeParse({ ...base, genres: [] }).success).toBe(false);
     expect(ProfileSchema.safeParse({ ...base, genres: [18] }).success).toBe(true);
+  });
+  it("escolhe o filme com mais gêneros selecionados", () => {
+    const movies = [{ id: 1, genre_ids: [35] }, { id: 2, genre_ids: [35, 18, 28] }, { id: 3, genre_ids: [18, 35] }];
+    expect(pickBestGenreMatch(movies, [35, 18, 28], [], () => 0.99)?.id).toBe(2);
+    expect(pickBestGenreMatch(movies, [35, 18, 28], [2], () => 0)?.id).toBe(3);
   });
 });

@@ -49,12 +49,13 @@ export const discoverMovies = createServerFn({ method: "POST" })
         genres: z.array(z.number().int()).min(1),
         gte: z.number(),
         lte: z.number(),
+        match: z.enum(["all", "any"]).default("any"),
       })
       .parse(d),
   )
   .handler(async ({ data }) => {
     const params = {
-      with_genres: data.genres.join("|"),
+      with_genres: data.genres.join(data.match === "all" ? "," : "|"),
       "with_runtime.gte": data.gte,
       "with_runtime.lte": data.lte,
       "vote_count.gte": 200,

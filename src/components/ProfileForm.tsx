@@ -4,7 +4,7 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getGenres } from "@/lib/tmdb.functions";
-import { DURATIONS, DURATION_LABEL, MOODS, MOOD_LABEL, type Duration, type Mood, type Profile } from "@/lib/sorteio";
+import { DURATIONS, DURATION_LABEL, type Duration, type Mood, type Profile } from "@/lib/sorteio";
 import { cn } from "@/lib/utils";
 
 export const genresQuery = { queryKey: ["genres"], queryFn: () => getGenres(), staleTime: 86400000, gcTime: 7 * 86400000 };
@@ -15,16 +15,11 @@ interface Props {
   onSubmit: (v: { genres: number[]; mood: Mood; duration: Duration }) => Promise<void> | void;
 }
 
-const MOOD_HINT: Record<Mood, string> = {
-  animado: "Leve, divertido, aventura",
-  melancolico: "Drama, romance, emoção",
-  reflexivo: "Mistério, ficção, ideias",
-};
 
 export function ProfileForm({ initial, submitLabel, onSubmit }: Props) {
   const { data: genres, isLoading, error } = useQuery(genresQuery);
   const [sel, setSel] = useState<number[]>(initial?.genres ?? []);
-  const [mood, setMood] = useState<Mood>(initial?.mood ?? "animado");
+  const mood: Mood = initial?.mood ?? "animado";
   const [duration, setDuration] = useState<Duration>(initial?.duration ?? "medio");
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -72,24 +67,6 @@ export function ProfileForm({ initial, submitLabel, onSubmit }: Props) {
         {err && <p className="mt-3 text-sm text-destructive">{err}</p>}
       </fieldset>
 
-      <fieldset>
-        <legend className="mb-4 font-display text-3xl tracking-wide">Seu humor de sempre</legend>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {MOODS.map((m) => (
-            <label
-              key={m}
-              className={cn(
-                "cursor-pointer rounded-lg border p-4 transition-colors focus-within:ring-2 focus-within:ring-ring",
-                mood === m ? "border-primary bg-primary/10" : "border-border bg-card hover:border-primary/60",
-              )}
-            >
-              <input type="radio" name="mood" className="sr-only" checked={mood === m} onChange={() => setMood(m)} />
-              <div className="font-medium">{MOOD_LABEL[m]}</div>
-              <div className="text-sm text-muted-foreground">{MOOD_HINT[m]}</div>
-            </label>
-          ))}
-        </div>
-      </fieldset>
 
       <fieldset>
         <legend className="mb-4 font-display text-3xl tracking-wide">Duração preferida</legend>
