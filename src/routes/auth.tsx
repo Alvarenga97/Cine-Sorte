@@ -15,9 +15,9 @@ export const Route = createFileRoute("/auth")({
   validateSearch: (s) => z.object({ returnTo: z.string().optional() }).parse(s),
   head: () => ({
     meta: [
-      { title: "Entrar — CineSorte" },
+      { title: "Entrar — Flixy" },
       { name: "description", content: "Entre para guardar seu histórico de filmes sorteados." },
-      { property: "og:title", content: "Entrar — CineSorte" },
+      { property: "og:title", content: "Entrar — Flixy" },
       { property: "og:description", content: "Guarde seu histórico de sorteios." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

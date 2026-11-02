@@ -8,9 +8,9 @@ import { MOOD_LABEL, type Mood } from "@/lib/sorteio";
 export const Route = createFileRoute("/_authenticated/history")({
   head: () => ({
     meta: [
-      { title: "Histórico — CineSorte" },
+      { title: "Histórico — Flixy" },
       { name: "description", content: "Todos os filmes que já foram sorteados para você." },
-      { property: "og:title", content: "Histórico — CineSorte" },
+      { property: "og:title", content: "Histórico — Flixy" },
       { property: "og:description", content: "Seus filmes sorteados." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
