@@ -21,7 +21,9 @@ interface AppCtx {
   signOut: () => Promise<void>;
 }
 
-const Ctx = createContext<AppCtx | null>(null);
+// Keep a single context instance across hot reloads so provider and consumers always match.
+const g = globalThis as unknown as { __cineSorteCtx?: React.Context<AppCtx | null> };
+const Ctx = (g.__cineSorteCtx ??= createContext<AppCtx | null>(null));
 
 type Row = { movie_id: number; title: string; poster_path: string | null; vote_average: number | null; genres: string[]; mood: string | null; duration: string | null; drawn_at: string };
 const fromRow = (r: Row): HistoryItem => ({
