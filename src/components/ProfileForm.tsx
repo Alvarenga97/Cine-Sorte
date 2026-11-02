@@ -4,7 +4,7 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getGenres } from "@/lib/tmdb.functions";
-import { DURATIONS, DURATION_LABEL, MOODS, MOOD_LABEL, type Duration, type Mood, type Profile } from "@/lib/sorteio";
+import { DURATIONS, DURATION_LABEL, type Duration, type Mood, type Profile } from "@/lib/sorteio";
 import { cn } from "@/lib/utils";
 
 export const genresQuery = { queryKey: ["genres"], queryFn: () => getGenres(), staleTime: 86400000, gcTime: 7 * 86400000 };
@@ -15,16 +15,11 @@ interface Props {
   onSubmit: (v: { genres: number[]; mood: Mood; duration: Duration }) => Promise<void> | void;
 }
 
-const MOOD_HINT: Record<Mood, string> = {
-  animado: "Leve, divertido, aventura",
-  melancolico: "Drama, romance, emoção",
-  reflexivo: "Mistério, ficção, ideias",
-};
 
 export function ProfileForm({ initial, submitLabel, onSubmit }: Props) {
   const { data: genres, isLoading, error } = useQuery(genresQuery);
   const [sel, setSel] = useState<number[]>(initial?.genres ?? []);
-  const [mood, setMood] = useState<Mood>(initial?.mood ?? "animado");
+  const mood: Mood = initial?.mood ?? "animado";
   const [duration, setDuration] = useState<Duration>(initial?.duration ?? "medio");
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
