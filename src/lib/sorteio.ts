@@ -76,6 +76,24 @@ export function pickRandomMovie<T extends ScorableMovie>(
   return top[Math.floor(rng() * top.length)]?.movie ?? null;
 }
 
+/** Picks randomly among movies that match the most selected genres, excluding ids. */
+export function pickBestGenreMatch<T extends ScorableMovie>(
+  movies: T[],
+  genres: number[],
+  excludeIds: number[] = [],
+  rng: Rng = Math.random,
+): T | null {
+  const excl = new Set(excludeIds);
+  const sel = new Set(genres);
+  const scored = movies
+    .filter((m) => !excl.has(m.id))
+    .map((m) => ({ m, s: m.genre_ids.filter((g) => sel.has(g)).length }));
+  if (!scored.length) return null;
+  const best = Math.max(...scored.map((x) => x.s));
+  const top = scored.filter((x) => x.s === best);
+  return top[Math.floor(rng() * top.length)]?.m ?? null;
+}
+
 export function randomPage(totalPages: number, rng: Rng = Math.random) {
   const max = Math.max(1, Math.min(totalPages, 500));
   return 1 + Math.floor(rng() * max);

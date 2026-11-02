@@ -72,24 +72,6 @@ export function ProfileForm({ initial, submitLabel, onSubmit }: Props) {
         {err && <p className="mt-3 text-sm text-destructive">{err}</p>}
       </fieldset>
 
-      <fieldset>
-        <legend className="mb-4 font-display text-3xl tracking-wide">Seu humor de sempre</legend>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {MOODS.map((m) => (
-            <label
-              key={m}
-              className={cn(
-                "cursor-pointer rounded-lg border p-4 transition-colors focus-within:ring-2 focus-within:ring-ring",
-                mood === m ? "border-primary bg-primary/10" : "border-border bg-card hover:border-primary/60",
-              )}
-            >
-              <input type="radio" name="mood" className="sr-only" checked={mood === m} onChange={() => setMood(m)} />
-              <div className="font-medium">{MOOD_LABEL[m]}</div>
-              <div className="text-sm text-muted-foreground">{MOOD_HINT[m]}</div>
-            </label>
-          ))}
-        </div>
-      </fieldset>
 
       <fieldset>
         <legend className="mb-4 font-display text-3xl tracking-wide">Duração preferida</legend>
