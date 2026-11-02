@@ -7,9 +7,9 @@ import { useApp } from "@/hooks/use-app";
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "Editar perfil — CineSorte" },
+      { title: "Editar perfil — Flixy" },
       { name: "description", content: "Ajuste seus gêneros favoritos, humor e duração preferida." },
-      { property: "og:title", content: "Editar perfil — CineSorte" },
+      { property: "og:title", content: "Editar perfil — Flixy" },
       { property: "og:description", content: "Ajuste seu perfil cinematográfico." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

@@ -17,9 +17,9 @@ import { PosterImg } from "@/components/PosterImg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "CineSorte — Escolha um filme para mim" },
+      { title: "Flixy — Escolha um filme para mim" },
       { name: "description", content: "Sorteie um filme sob medida para seus gêneros favoritos, humor e tempo disponível." },
-      { property: "og:title", content: "CineSorte — Escolha um filme para mim" },
+      { property: "og:title", content: "Flixy — Escolha um filme para mim" },
       { property: "og:description", content: "Sorteie um filme sob medida para seu gosto e humor." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
