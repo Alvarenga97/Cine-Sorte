@@ -15,7 +15,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4">
         <Link to="/" className="flex items-center" aria-label="Flixy">
-          <img src={logo} alt="Flixy" width={1536} height={768} className="h-10 w-auto" />
+          <img src={logo} alt="Flixy" width={1536} height={768} className="-my-2 h-16 w-auto" />
         </Link>
         <nav className="flex items-center gap-5">
           <Link to="/" className={linkCls} activeProps={active} activeOptions={{ exact: true }}>Sortear</Link>
