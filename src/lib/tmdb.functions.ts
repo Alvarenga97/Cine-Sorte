@@ -59,6 +59,8 @@ export const discoverMovies = createServerFn({ method: "POST" })
       "with_runtime.gte": data.gte,
       "with_runtime.lte": data.lte,
       "vote_count.gte": 200,
+      // Only movies from the last 10 years (e.g. in 2027: 2017 onward).
+      "primary_release_date.gte": `${new Date().getFullYear() - 10}-01-01`,
       include_adult: "false",
       region: "BR",
       sort_by: "popularity.desc",
