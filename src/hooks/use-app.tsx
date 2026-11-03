@@ -83,17 +83,31 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let active = true;
-    supabase.auth.getUser().then(async ({ data }) => {
-      if (!active) return;
-      setUser(data.user);
-      await syncForUser(data.user);
+    const backendReady = Boolean(import.meta.env["VITE_SUPABASE_URL"] && import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"]);
+    if (!backendReady) {
+      // Backend not configured in this build: run in local-only mode instead of crashing.
+      setProfile(getLocalProfile());
+      setHistory(getAnonHistory());
       setReady(true);
-    });
+      return;
+    }
+    supabase.auth
+      .getUser()
+      .then(async ({ data }) => {
+        if (!active) return;
+        setUser(data.user);
+        await syncForUser(data.user);
+      })
+      .catch(() => {
+        setProfile(getLocalProfile());
+        setHistory(getAnonHistory());
+      })
+      .finally(() => active && setReady(true));
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT") return;
       const u = session?.user ?? null;
       setUser(u);
-      setTimeout(() => void syncForUser(u), 0);
+      setTimeout(() => void syncForUser(u).catch(() => {}), 0);
     });
     return () => {
       active = false;
