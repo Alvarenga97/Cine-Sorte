@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
+import { Route as ApiPublicJobsSyncCatalogRouteImport } from './routes/api/public/jobs/sync-catalog'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -45,6 +46,12 @@ const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicJobsSyncCatalogRoute =
+  ApiPublicJobsSyncCatalogRouteImport.update({
+    id: '/api/public/jobs/sync-catalog',
+    path: '/api/public/jobs/sync-catalog',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -52,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/profile': typeof ProfileRoute
   '/history': typeof AuthenticatedHistoryRoute
+  '/api/public/jobs/sync-catalog': typeof ApiPublicJobsSyncCatalogRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -59,6 +67,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/profile': typeof ProfileRoute
   '/history': typeof AuthenticatedHistoryRoute
+  '/api/public/jobs/sync-catalog': typeof ApiPublicJobsSyncCatalogRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -68,12 +77,25 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRoute
   '/profile': typeof ProfileRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
+  '/api/public/jobs/sync-catalog': typeof ApiPublicJobsSyncCatalogRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/onboarding' | '/profile' | '/history'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/onboarding'
+    | '/profile'
+    | '/history'
+    | '/api/public/jobs/sync-catalog'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/onboarding' | '/profile' | '/history'
+  to:
+    | '/'
+    | '/auth'
+    | '/onboarding'
+    | '/profile'
+    | '/history'
+    | '/api/public/jobs/sync-catalog'
   id:
     | '__root__'
     | '/'
@@ -82,6 +104,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/profile'
     | '/_authenticated/history'
+    | '/api/public/jobs/sync-catalog'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -90,6 +113,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   OnboardingRoute: typeof OnboardingRoute
   ProfileRoute: typeof ProfileRoute
+  ApiPublicJobsSyncCatalogRoute: typeof ApiPublicJobsSyncCatalogRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -136,6 +160,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHistoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/jobs/sync-catalog': {
+      id: '/api/public/jobs/sync-catalog'
+      path: '/api/public/jobs/sync-catalog'
+      fullPath: '/api/public/jobs/sync-catalog'
+      preLoaderRoute: typeof ApiPublicJobsSyncCatalogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -156,6 +187,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   OnboardingRoute: OnboardingRoute,
   ProfileRoute: ProfileRoute,
+  ApiPublicJobsSyncCatalogRoute: ApiPublicJobsSyncCatalogRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

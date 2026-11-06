@@ -65,13 +65,44 @@ export const discoverMovies = createServerFn({ method: "POST" })
       region: "BR",
       sort_by: "popularity.desc",
     };
+    const { createClient } = await import("@supabase/supabase-js");
+    const sbKey = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
+    const sb = createClient(process.env["SUPABASE_URL"]!, sbKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+      global: {
+        fetch: (input, init) => {
+          const h = new Headers(init?.headers);
+          if (sbKey.startsWith("sb_") && h.get("Authorization") === `Bearer ${sbKey}`) h.delete("Authorization");
+          h.set("apikey", sbKey);
+          return fetch(input, { ...init, headers: h });
+        },
+      },
+    });
+    // Keep only movies available on guiadeconteudo.blog.
+    async function available(list: DiscoverMovie[]) {
+      if (!list.length) return [] as (DiscoverMovie & { siteUrl: string })[];
+      const { data, error } = await sb
+        .from("site_catalog")
+        .select("tmdb_id, site_url")
+        .in("tmdb_id", list.map((m) => m.id));
+      if (error) throw new Error("Erro ao verificar disponibilidade");
+      const map = new Map(data.map((r) => [r.tmdb_id, r.site_url]));
+      return list.filter((m) => map.has(m.id)).map((m) => ({ ...m, siteUrl: map.get(m.id)! }));
+    }
+
     const first = await tmdb<{ total_pages: number; results: DiscoverMovie[] }>("/discover/movie", params);
-    if (!first.results.length) return { results: [] as DiscoverMovie[] };
+    if (!first.results.length) return { results: [] };
     const max = Math.min(first.total_pages, 500);
-    const page = 1 + Math.floor(Math.random() * max);
-    if (page === 1) return { results: first.results };
-    const r = await tmdb<{ results: DiscoverMovie[] }>("/discover/movie", { ...params, page });
-    return { results: r.results.length ? r.results : first.results };
+    const pages = new Set<number>([1]);
+    let found = await available(first.results);
+    for (let i = 0; i < 6 && found.length === 0 && pages.size < max; i++) {
+      let page = 1 + Math.floor(Math.random() * max);
+      while (pages.has(page)) page = (page % max) + 1;
+      pages.add(page);
+      const r = await tmdb<{ results: DiscoverMovie[] }>("/discover/movie", { ...params, page });
+      found = await available(r.results);
+    }
+    return { results: found };
   });
 
 export const getMovieExtras = createServerFn({ method: "POST" })

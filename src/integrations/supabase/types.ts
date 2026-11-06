@@ -77,6 +77,51 @@ export type Database = {
         }
         Relationships: []
       }
+      site_catalog: {
+        Row: {
+          matched_at: string
+          site_url: string
+          title: string
+          tmdb_id: number
+        }
+        Insert: {
+          matched_at?: string
+          site_url: string
+          title: string
+          tmdb_id: number
+        }
+        Update: {
+          matched_at?: string
+          site_url?: string
+          title?: string
+          tmdb_id?: number
+        }
+        Relationships: []
+      }
+      site_pages: {
+        Row: {
+          lastmod: string | null
+          processed_at: string | null
+          title: string | null
+          tmdb_id: number | null
+          url: string
+        }
+        Insert: {
+          lastmod?: string | null
+          processed_at?: string | null
+          title?: string | null
+          tmdb_id?: number | null
+          url: string
+        }
+        Update: {
+          lastmod?: string | null
+          processed_at?: string | null
+          title?: string | null
+          tmdb_id?: number | null
+          url?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

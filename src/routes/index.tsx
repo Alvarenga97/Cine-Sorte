@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Dices, Play, Star, Pencil, Film } from "lucide-react";
+import { Dices, Play, Star, Pencil, Film, CheckCircle2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useApp } from "@/hooks/use-app";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,7 @@ export const Route = createFileRoute("/")({
 
 interface Result {
   movie: DiscoverMovie;
+  siteUrl: string;
   runtime: number | null;
   genres: string[];
   trailerKey: string | null;
@@ -58,7 +59,7 @@ function Index() {
       const exclude = [...history.map((h) => h.movieId), ...(result ? [result.movie.id] : [])];
       const favs = [...profile.genres];
       // 1) filmes com TODOS os gêneros escolhidos; 2) senão, o mais próximo possível
-      let picked: DiscoverMovie | null = null;
+      let picked: (DiscoverMovie & { siteUrl: string }) | null = null;
       let relaxed = false;
       if (favs.length > 1) {
         const { results } = await discoverMovies({ data: { genres: favs, ...range, match: "all" } });
@@ -76,7 +77,7 @@ function Index() {
       }
       if (relaxed) toast("Não achamos um filme com todos os gêneros; escolhemos o mais próximo.");
       const extras = await getMovieExtras({ data: { id: picked.id } });
-      setResult({ movie: picked, ...extras });
+      setResult({ movie: picked, siteUrl: picked.siteUrl, ...extras });
       await addHistory({
         movieId: picked.id,
         title: picked.title,
@@ -119,7 +120,12 @@ function Index() {
             <div key={m.id} className="flex gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <PosterImg path={m.poster_path} title={m.title} className="hidden h-80 w-56 shrink-0 rounded-lg shadow-2xl md:block" />
               <div className="max-w-xl">
-                <p className="mb-2 text-sm text-primary">Sorteado para você</p>
+                <div className="mb-2 flex flex-wrap items-center gap-3">
+                  <p className="text-sm text-primary">Sorteado para você</p>
+                  <a href={result.siteUrl} target="_blank" rel="noopener noreferrer">
+                    <Badge className="gap-1 bg-accent text-accent-foreground hover:bg-accent/90"><CheckCircle2 className="h-3.5 w-3.5" /> Disponível no app</Badge>
+                  </a>
+                </div>
                 <h1 className="font-display text-6xl leading-none tracking-wide md:text-7xl">{m.title}</h1>
                 <div className="mt-3 flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground">
                   <span>{m.release_date?.slice(0, 4)}</span>
